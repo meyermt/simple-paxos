@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'com.github.johnrengelman.shadow' version '1.2.4'
+}
+
+// In this section you declare where to find the dependencies of your project
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+// In this section you declare the dependencies for your production and test code
+dependencies {
+  compile 'org.slf4j:slf4j-api:1.7.22'
+  compile 'com.sparkjava:spark-template-velocity:2.5.5'
+  compile 'com.mashape.unirest:unirest-java:1.4.9'
+  compile 'com.sparkjava:spark-core:2.5.5'
+  compile 'com.google.code.gson:gson:2.8.0'
+  compile 'org.xerial:sqlite-jdbc:3.16.1'
+  compile 'com.fasterxml.jackson.core:jackson-databind:2.8.8'
+  runtime 'ch.qos.logback:logback-classic:1.2.2'
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'com.meyermt.paxos.PaxServer'
+        )
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.5'
+}
