@@ -1,6 +1,7 @@
 package com.meyermt.paxos;
 
 /**
+ * A POJO that represents the JSON structure within the Paxos Protocol for this program.
  * Created by michaelmeyer on 5/3/17.
  */
 public class PaxProtocol {
@@ -20,6 +21,14 @@ public class PaxProtocol {
     public PaxProtocol() {
     }
 
+    /**
+     * Constructs a new Paxos Protocol bean.
+     * @param port port object is destined for.
+     * @param action type of action for object
+     * @param proposedPrice current running proposed price for consensus
+     * @param sequence current running highest sequence
+     * @param sourcePort port from which request originated
+     */
     public PaxProtocol(int port, String action, int proposedPrice, int sequence, int sourcePort) {
         this.port = port;
         this.action = action;

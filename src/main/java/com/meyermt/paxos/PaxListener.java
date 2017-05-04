@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
+ * A server/listener that does all the work for the algorithm. Responsible for listening for PaxProtocol items from other
+ * nodes as well as broadcasting items from "outside" users (command line users).
  * Created by michaelmeyer on 5/3/17.
  */
 public class PaxListener implements Runnable {
@@ -34,7 +36,7 @@ public class PaxListener implements Runnable {
      * Instantiates a PaxListener.
      *
      * @param server       The server to use to listen for connections.
-     * @param networkPorts The ports
+     * @param networkPorts The ports in the network
      */
     public PaxListener(ServerSocket server, List<Integer> networkPorts) {
         this.server = server;
@@ -45,6 +47,9 @@ public class PaxListener implements Runnable {
         this.agreedSequence = Optional.empty();
     }
 
+    /*
+        Determines how to respond to various PaxProtocol items.
+     */
     @Override
     public void run() {
         logger.info("Running server on port {}", server.getLocalPort());
@@ -140,6 +145,11 @@ public class PaxListener implements Runnable {
         }
     }
 
+    /**
+     *
+     * @param proposedPrice
+     * @param proposedSeq
+     */
     public void proposePrice(int proposedPrice, int proposedSeq) {
         proposalEnded = false;
         networkPorts.stream().forEach(port -> {
@@ -149,6 +159,10 @@ public class PaxListener implements Runnable {
         agreeCount = 0;
     }
 
+    /**
+     * Broadcasts commit messages to all nodes, asking them to commit to updating their values.
+     * @param proposedPrice The price to broadcast
+     */
     public void sendCommits(int proposedPrice) {
         agreeCommitEnded = false;
         networkPorts.stream().forEach(port -> {
@@ -157,6 +171,11 @@ public class PaxListener implements Runnable {
         });
     }
 
+    /**
+     * Sends a PaxProtocol bean to a given node.
+     * @param proto The bean to send along in request
+     * @param port The port to send request to
+     */
     public void sendProto(PaxProtocol proto, int port) {
         try {
             Gson gson = new Gson();
@@ -200,6 +219,9 @@ public class PaxListener implements Runnable {
         this.agreedSequence = Optional.of(sequence);
     }
 
+    /*
+        Reusable method to read PaxProtocol beans in.
+     */
     private PaxProtocol readResultToProtocol(Socket client) {
         logger.info("Entering readResultToProtocol");
         try (BufferedReader input = new BufferedReader(new InputStreamReader(client.getInputStream()));)
