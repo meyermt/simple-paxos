@@ -20,3 +20,10 @@ Must have Java 8 installed to run this project.
 
 * Update a number of nodes' agreed prices and sequences and then choose a node to propose a price. Eventually the right sequence/price should prevail.
 
+## Question 2 - How many exchanges can fail?
+
+You need a majority of nodes in the network to agree to your change before you ask for committing, so either only one less than half can fail, OR you can update what you consider in-network nodes to remove failed ones.
+
+## Known Issues
+
+* There is no timeout mechanism in this implementation, so it is possible that a node never hears back and does not recover (as a proposer)
